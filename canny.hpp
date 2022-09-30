@@ -61,9 +61,9 @@ class Canny {
     int w_;
     int h_;
     int size_;
-    double* G_;
-    double* M_;
-    unsigned char* s_;
+    double* G_; // magnitude，强度，或称方向大小
+    double* M_; // G_计算完，复制给M_
+    unsigned char* s_; // 方向枚举值
 };
 }
 

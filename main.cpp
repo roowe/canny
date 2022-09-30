@@ -54,7 +54,7 @@
 
 #include "canny.hpp"
 
-extern FILE* stdin;
+extern FILE* stdin; // 声明而不是定义
 extern FILE* stdout;
 extern FILE* stderr;
 
@@ -75,7 +75,7 @@ void usage(char* s) {
     fprintf(stderr,
             "%s -s <source file> [-l <low threshold>] [-h <high threshold>] "
             "[-? help]",
-            s);
+            s); // s是程序名
     fprintf(stderr, "   s: path image file\n");
     fprintf(stderr, "   l: canny low threshold\n");
     fprintf(stderr, "   h: canny high threshold\n");
@@ -87,6 +87,10 @@ void usage(char* s) {
 
 int main(int argc, char** argv) {
     int c;
+    // https://blog.csdn.net/afei__/article/details/81261879
+    // 该方法由 Unix 标准库提供，包含在 <unistd.h> 头文件中。
+    // extern char *optarg;
+    // extern int optind, opterr, optopt;  
     while (((c = getopt(argc, argv, "s:l:h:?"))) != -1) {
         switch (c) {
             case 's':
@@ -133,8 +137,8 @@ void doTransform(std::string file_path) {
     cv::Mat img_edge;
     cv::Mat img_gray;
 
-    cv::Mat img_ori = cv::imread(file_path, 1);
-    cv::cvtColor(img_ori, img_gray, cv::COLOR_BGR2GRAY);
+    cv::Mat img_ori = cv::imread(file_path, 1); // 读图片
+    cv::cvtColor(img_ori, img_gray, cv::COLOR_BGR2GRAY); // 转灰度
 
     int w = img_gray.cols;
     int h = img_ori.rows;
@@ -145,6 +149,7 @@ void doTransform(std::string file_path) {
         cv::Mat img_edge(h, w, CV_8UC1, cv::Scalar::all(0));
 
         keymolen::Canny canny(w, h);
+        // 运行canny算法
         canny.edges(img_edge.data, img_gray.data, filter, low_threshold,
                     high_threshold);
 
@@ -155,6 +160,7 @@ void doTransform(std::string file_path) {
 
         char c = cv::waitKey(360000);
 
+        // 动态修改参数
         if (c == 'h') {
             if (high_threshold > 10)
                 high_threshold -= 5;
